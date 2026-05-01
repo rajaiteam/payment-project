@@ -1,47 +1,62 @@
 const express = require('express');
 const axios = require('axios');
+const path = require('path');
+
 const app = express();
 
+// 🔹 Middleware
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
-// 🔹 Payment Create API
+// 🔹 ENV Variables (Render Dashboard me set karna)
+const API_KEY = process.env.API_KEY;
+const MERCHANT_ID = process.env.MERCHANT_ID;
+
+// 🔹 Home Route (optional safety)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// 🔹 Create Payment API
 app.post('/create-payment', async (req, res) => {
   try {
-    
     const orderId = "ORD_" + Date.now();
 
     const response = await axios.post(
-      "https://api.paymentgateway.com/create-order", // 👉 Yahan apna real gateway URL daalo
+      "https://api.jazpays.com/v1/create", // 👉 Apna real API URL daalo
       {
-        merchant_id: "100222010",
-        amount: 100,
+        merchant_id: MERCHANT_ID,
+        amount: 100, // ₹100 (change kar sakte ho)
         currency: "INR",
         order_id: orderId,
-        redirect_url: "http://localhost:3000/success.html",
-        cancel_url: "http://localhost:3000/cancel.html"
+        redirect_url: "https://YOUR-APP.onrender.com/success.html",
+        cancel_url: "https://YOUR-APP.onrender.com/cancel.html"
       },
       {
         headers: {
-          "Authorization": "cadef6ef9ef5599988fd9dd5d880645a",
+          "Authorization": `Bearer ${API_KEY}`,
           "Content-Type": "application/json"
         }
       }
     );
 
-    // 🔹 Payment Link return
+    // 🔹 Payment link return
     res.json({
       payment_url: response.data.payment_link
     });
 
   } catch (error) {
-    console.log(error.response?.data || error.message);
-    res.status(500).send("Payment Error");
+    console.log("ERROR:", error.response?.data || error.message);
+
+    res.status(500).json({
+      message: "Payment creation failed"
+    });
   }
 });
 
+// 🔹 PORT (Render ke liye IMPORTANT)
+const PORT = process.env.PORT || 3000;
 
-// 🔹 Server Start
-app.listen(3000, () => {
-  console.log("Server running: http://localhost:3000");
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
