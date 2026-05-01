@@ -14,7 +14,7 @@ app.post('/create-payment', async (req, res) => {
     const response = await axios.post(
       "https://api.paymentgateway.com/create-order", // 👉 Yahan apna real gateway URL daalo
       {
-        merchant_id: "YOUR_MERCHANT_ID",
+        merchant_id: "100222010",
         amount: 100,
         currency: "INR",
         order_id: orderId,
@@ -23,7 +23,7 @@ app.post('/create-payment', async (req, res) => {
       },
       {
         headers: {
-          "Authorization": "Bearer YOUR_API_KEY",
+          "Authorization": "cadef6ef9ef5599988fd9dd5d880645a",
           "Content-Type": "application/json"
         }
       }
