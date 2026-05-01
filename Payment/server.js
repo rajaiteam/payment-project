@@ -29,8 +29,8 @@ app.post('/create-payment', async (req, res) => {
         amount: 100, // ₹100 (change kar sakte ho)
         currency: "INR",
         order_id: orderId,
-        redirect_url: "https://YOUR-APP.onrender.com/success.html",
-        cancel_url: "https://YOUR-APP.onrender.com/cancel.html"
+        redirect_url: "https://payment-project-zpol.onrender.com/success.html",
+        cancel_url: "https://payment-project-zpol.onrender.com/cancel.html"
       },
       {
         headers: {
