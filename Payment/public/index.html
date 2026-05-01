@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Payment Page</title>
+</head>
+<body style="text-align:center; margin-top:100px; font-family:sans-serif;">
+
+<h1>Pay ₹100</h1>
+
+<button onclick="payNow()" style="padding:15px 30px; font-size:18px;">
+  Pay Now
+</button>
+
+<script>
+function payNow() {
+  fetch('/create-payment', {
+    method: 'POST'
+  })
+  .then(res => res.json())
+  .then(data => {
+    window.location.href = data.payment_url;
+  })
+  .catch(err => {
+    alert("Error: " + err);
+  });
+}
+</script>
+
+</body>
+</html>
